@@ -68,7 +68,6 @@ export default {
       this.isClassApse = !this.isClassApse
     },
     saveNewState (path) {
-      console.log(path)
       window.sessionStorage.setItem('activePath', path)
       this.activePath = path
     }
