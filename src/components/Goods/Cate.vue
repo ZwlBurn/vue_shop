@@ -41,7 +41,7 @@
   <el-dialog
   title="添加分类"
   :visible.sync="addCatevisibile"
-  width="=50%" @click='addCateDialogClosed'>
+  width="=50%" @close='addCateDialogClosed'>
   <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateFormRef" label-width="100px" >
     <el-form-item label="分类名称" prop="cat_name">
       <el-input v-model="addCateForm.cat_name"></el-input>
@@ -113,7 +113,8 @@ export default {
         value: 'cat_id',
         label: 'cat_name',
         children: 'children',
-        expandTrigger: 'hover'
+        expandTrigger: 'hover',
+        checkStrictly: true
       }
     }
   },
@@ -143,17 +144,15 @@ export default {
       const { data: res } = await this.$http.get('categories', { params: { type: 2 } })
       if (res.meta.status !== 200) return this.$message.info(res.meta.msg)
       this.parentCateList = res.data
-      console.log(this.parentCateList)
     },
     parentCateChange () {
-      console.log(this.selectedKeys)
       if (this.selectedKeys.length > 0) {
       //  父级分类的id
-        this.addCateForm.pid = this.selectedKeys[this.selectedKeys - 1]
+        this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
         // 当前分类的等级
         this.addCateForm.cat_level = this.selectedKeys.length
       } else {
-        this.addCateForm.pid = 0
+        this.addCateForm.cat_pid = 0
         this.addCateForm.cat_level = 0
       }
     },
@@ -164,14 +163,14 @@ export default {
         const { data: res } = await this.$http.post('categories', this.addCateForm)
         if (res.meta.status !== 201) return this.$message.error(res.meta.msg)
         this.$message.success('添加成功')
-        this.addCatevisibile = false
         this.getCateList()
+        this.addCatevisibile = false
       })
     },
     addCateDialogClosed () {
       this.$refs.addCateFormRef.resetFields()
       this.selectedKeys = []
-      this.addCateForm.pid = 0
+      this.addCateForm.cat_pid = 0
       this.addCateForm.cat_level = 0
     }
   }
