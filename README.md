@@ -21,4 +21,8 @@ npm run lint
 ```
 
 ### Customize configuration
+
+```
+无后台数据库，可参考notice.html有项目界面展示
+```
 See [Configuration Reference](https://cli.vuejs.org/config/).
